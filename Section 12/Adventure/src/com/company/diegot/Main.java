@@ -14,6 +14,14 @@ public class Main {
     private static final String QUIT = "Q";
 
     public static void main(String[] args) {
+        // Change the program to allow players to type full words, or phrases, then move to the
+        // correct location based upon their input.
+        // The player should be able to type commands such as "Go West", "run South", or just "East"
+        // and the program will move to the appropriate location if there is one.  As at present, an
+        // attempt to move in an invalid direction should print a message and remain in the same place.
+        //
+        // Single letter commands (N, W, S, E, Q) should still be available.
+
         Scanner scanner = new Scanner(System.in);
 
         locations.put(0, new Location(0, "You are sitting in front of a computer learning Java"));
@@ -22,6 +30,13 @@ public class Main {
         locations.put(3, new Location(3, "You are inside a building, a well house for a small spring"));
         locations.put(4, new Location(4, "You are in a valley beside a stream"));
         locations.put(5, new Location(5, "You are in the forest"));
+
+        Map<String, String> keywords = new HashMap<String, String>();
+        keywords.put("WEST", WEST_EXIT);
+        keywords.put("EAST", EAST_EXIT);
+        keywords.put("SOUTH", SOUTH_EXIT);
+        keywords.put("NORTH", NORTH_EXIT);
+        keywords.put("QUIT", QUIT);
 
         // Road exits
         locations.get(1).addExit(WEST_EXIT, 2);
@@ -59,6 +74,18 @@ public class Main {
             System.out.println();
 
             String direction = scanner.nextLine().toUpperCase();
+
+            if(direction.length() > 1) {
+                String[] words = direction.split(" ");
+                for (String word : words) {
+                    if(keywords.containsKey(word)) {
+                        direction = keywords.get(word);
+                        break;
+                    }
+                }
+
+            }
+
             if (exits.containsKey(direction)) {
                 loc = exits.get(direction);
             } else {
