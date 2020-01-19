@@ -6,6 +6,12 @@ import java.util.Scanner;
 
 public class Main {
     private static Map<Integer, Location> locations = new HashMap<Integer, Location>();
+    private static final String WEST_EXIT = "W";
+    private static final String EAST_EXIT = "E";
+    private static final String SOUTH_EXIT = "S";
+    private static final String NORTH_EXIT = "N";
+
+    private static final String QUIT = "Q";
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -17,18 +23,45 @@ public class Main {
         locations.put(4, new Location(4, "You are in a valley beside a stream"));
         locations.put(5, new Location(5, "You are in the forest"));
 
+        // Road exits
+        locations.get(1).addExit(WEST_EXIT, 2);
+        locations.get(1).addExit(EAST_EXIT, 3);
+        locations.get(1).addExit(SOUTH_EXIT, 4);
+        locations.get(1).addExit(NORTH_EXIT, 5);
+
+        // Hill exits
+        locations.get(2).addExit(NORTH_EXIT, 5);
+
+        // Building exits
+        locations.get(3).addExit(WEST_EXIT, 1);
+
+        // Valley exits
+        locations.get(4).addExit(NORTH_EXIT, 1);
+        locations.get(4).addExit(WEST_EXIT, 2);
+
+        // Forest exits
+        locations.get(5).addExit(WEST_EXIT, 2);
+        locations.get(5).addExit(SOUTH_EXIT, 1);
+
         int loc = 1;
 
         while(true) {
             System.out.println(locations.get(loc).getDescription());
-
             if(loc == 0) {
                 break;
             }
 
-            loc = scanner.nextInt();
+            Map<String, Integer> exits = locations.get(loc).getExits();
+            System.out.print("Available exits are ");
+            for (String exit : exits.keySet()) {
+                System.out.print(exit + ", ");
+            }
+            System.out.println();
 
-            if(!locations.containsKey(loc)) {
+            String direction = scanner.nextLine().toUpperCase();
+            if (exits.containsKey(direction)) {
+                loc = exits.get(direction);
+            } else {
                 System.out.println("You cannot go in that direction!");
             }
         }
