@@ -24,7 +24,6 @@ public class Main {
 
         Scanner scanner = new Scanner(System.in);
 
-
         Map<String, String> keywords = new HashMap<String, String>();
         keywords.put("WEST", WEST_EXIT);
         keywords.put("EAST", EAST_EXIT);
